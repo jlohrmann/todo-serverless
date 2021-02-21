@@ -18,6 +18,10 @@ provider:
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'us-west-2'}
 
+  tracing:
+    lambda: true
+    apiGateway: true
+
   environment:
     TODOS_TABLE: Todos-${self:provider.stage}
     TODO_IMAGES_TABLE: Todo-Images-aedyg-${self:provider.stage}
