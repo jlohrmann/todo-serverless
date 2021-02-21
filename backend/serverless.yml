@@ -20,7 +20,7 @@ provider:
 
   environment:
     TODOS_TABLE: Todos-${self:provider.stage}
-    TODO_IMAGES_TABLE: Todo-Images-${self:provider.stage}
+    TODO_IMAGES_TABLE: Todo-Images-aedyg-${self:provider.stage}
     IMAGE_ID_INDEX: ImageIdIndex
     INDEX_NAME: LastPostIndex
     IMAGES_S3_BUCKET: serverless-todos-images-aedyg-${self:provider.stage}
@@ -53,6 +53,7 @@ functions:
           method: get
           path: todos
           cors: true
+          reqValidatorName: RequestBodyValidator
     iamRoleStatements:
     - Effect: Allow
       Action:
@@ -68,6 +69,7 @@ functions:
           method: post
           path: todos
           cors: true
+          reqValidatorName: RequestBodyValidator
     iamRoleStatements:
     - Effect: Allow
       Action:
@@ -84,6 +86,7 @@ functions:
           method: patch
           path: todos/{todoId}
           cors: true
+          reqValidatorName: RequestBodyValidator
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -113,6 +116,7 @@ functions:
           method: delete
           path: todos/{todoId}
           cors: true
+          reqValidatorName: RequestBodyValidator
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -142,6 +146,7 @@ functions:
           method: post
           path: todos/{todoId}/attachment
           cors: true
+          reqValidatorName: RequestBodyValidator
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -230,6 +235,15 @@ resources:
               KeyType: HASH
             Projection:
               ProjectionType: ALL
+
+    RequestBodyValidator:
+      Type: AWS::ApiGateway::RequestValidator
+      Properties:
+        Name: 'request-body-validator'
+        RestApiId:
+          Ref: ApiGatewayRestApi
+        ValidateRequestBody: true
+        ValidateRequestParameters: false
   
     AttachmentsBucket:
       Type: AWS::S3::Bucket
